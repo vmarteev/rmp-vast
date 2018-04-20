@@ -1,18 +1,18 @@
 module.exports = {
   jshint: {
-    command: 'jshint js/src/. Gruntfile.js app/js/. test/spec/.'
+    command: './node_modules/.bin/jshint js/src/. Gruntfile.js app/js/. test/spec/.'
   },
   browserify: {
-    command: 'browserify js/src/main.js -o js/dist/rmp-vast.js -t [ babelify ] -v'
+    command: './node_modules/.bin/browserify js/src/main.js -o js/dist/rmp-vast.js -t [ babelify ] -v'
   },
   watchify: {
-    command: 'watchify js/src/main.js -o js/dist/rmp-vast.js -t [ babelify ] -v'
+    command: './node_modules/.bin/watchify js/src/main.js -o js/dist/rmp-vast.js -t [ babelify ] -v'
   },
   uglify: {
-    command: 'uglifyjs js/dist/rmp-vast.js --compress --define DEBUG=false --mangle --screw-ie8 --comments -o js/dist/rmp-vast.min.js'
+    command: './node_modules/.bin/uglifyjs js/dist/rmp-vast.js --compress --define DEBUG=false --mangle --screw-ie8 --comments -o js/dist/rmp-vast.min.js'
   },
   stylelint: {
-    command: 'stylelint "css/*.less" "css/import-less/*.less" "app/css/*.css"'
+    command: './node_modules/.bin/stylelint "css/*.less" "css/import-less/*.less" "app/css/*.css"'
   },
   test: {
     command: [

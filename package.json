@@ -25,6 +25,7 @@
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^8.0.0",
+    "browserify": "^16.2.0",
     "core-js": "^2.5.3",
     "grunt": "^0.4.5",
     "grunt-concurrent": "^2.3.1",
@@ -34,10 +35,13 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-shell": "^2.1.0",
     "grunt-text-replace": "^0.4.0",
+    "jshint": "^2.9.5",
     "load-grunt-config": "^0.19.2",
     "selenium-webdriver": "^3.6.0",
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
-    "time-grunt": "^1.4.0"
+    "time-grunt": "^1.4.0",
+    "uglify-js": "^3.3.21",
+    "watchify": "^3.11.0"
   }
 }
