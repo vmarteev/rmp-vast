@@ -399,6 +399,27 @@ var _onXmlAvailable = function (xml) {
   _parseCreatives.call(this, creative);
 };
 
+var _parseVastData = function(data) {
+  API.createEvent.call(this, 'adtagloaded');
+  let xml;
+  try {
+    // Parse XML
+    let parser = new DOMParser();
+    xml = parser.parseFromString(data, 'text/xml');
+    if (DEBUG) {
+      FW.log('RMP-VAST: parsed XML document follows');
+      FW.log(xml);
+    }
+  } catch (e) {
+    FW.trace(e);
+    // in case this is a wrapper we need to ping for errors on originating tags
+    PING.error.call(this, 100, this.inlineOrWrapperErrorTags);
+    VASTERRORS.process.call(this, 100);
+    return;
+  }
+  _onXmlAvailable.call(this, xml);
+};
+
 var _makeAjaxRequest = function (vastUrl) {
   // we check for required VAST URL and API here
   // as we need to have this.currentContentSrc available for iOS
@@ -418,31 +439,24 @@ var _makeAjaxRequest = function (vastUrl) {
   this.isWrapper = false;
   this.vastAdTagURI = null;
   this.adTagUrl = vastUrl;
+
+  if (vastUrl.indexOf('xml:') === 0) {
+    const vastData = vastUrl.substring(4);
+    window.setTimeout(() => {
+      _parseVastData.call(this, vastData);
+    }, 0);
+    return;
+  }
+
   if (DEBUG) {
     FW.log('RMP-VAST: try to load VAST tag at ' + this.adTagUrl);
   }
+
   FW.ajax(this.adTagUrl, this.params.ajaxTimeout, true, this.params.ajaxWithCredentials).then((data) => {
     if (DEBUG) {
       FW.log('RMP-VAST: VAST loaded from ' + this.adTagUrl);
     }
-    API.createEvent.call(this, 'adtagloaded');
-    let xml;
-    try {
-      // Parse XML
-      let parser = new DOMParser();
-      xml = parser.parseFromString(data, 'text/xml');
-      if (DEBUG) {
-        FW.log('RMP-VAST: parsed XML document follows');
-        FW.log(xml);
-      }
-    } catch (e) {
-      FW.trace(e);
-      // in case this is a wrapper we need to ping for errors on originating tags
-      PING.error.call(this, 100, this.inlineOrWrapperErrorTags);
-      VASTERRORS.process.call(this, 100);
-      return;
-    }
-    _onXmlAvailable.call(this, xml);
+    _parseVastData.call(this, data);
   }).catch((e) => {
     FW.trace(e);
     // in case this is a wrapper we need to ping for errors on originating tags
