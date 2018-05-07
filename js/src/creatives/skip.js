@@ -1,6 +1,5 @@
-import { FWVAST } from '../fw/fw-vast';
+import { FW } from '../fw/fw';
 import { VASTPLAYER } from '../players/vast-player';
-import { TRACKINGEVENTS } from '../tracking/tracking-events';
 import { API } from '../api/api';
 
 const SKIP = {};
@@ -23,7 +22,7 @@ var _onTimeupdateCheckSkip = function () {
   }
   this.vastPlayerCurrentTime = this.vastPlayer.currentTime;
   if (typeof this.vastPlayerCurrentTime === 'number' && this.vastPlayerCurrentTime > 0) {
-    let skipoffsetSeconds = FWVAST.convertOffsetToSeconds(this.skipoffset, this.vastPlayerDuration);
+    let skipoffsetSeconds = FW.convertOffsetToSeconds(this.skipoffset, this.vastPlayerDuration);
     if (this.vastPlayerCurrentTime >= skipoffsetSeconds) {
       this.vastPlayer.removeEventListener('timeupdate', this.onTimeupdateCheckSkip);
       _setCanBeSkippedUI.call(this);
@@ -43,13 +42,11 @@ var _onClickSkip = function (event) {
     }
   }
   if (this.skippableAdCanBeSkipped) {
-    // create API event
+    // create API event 
     API.createEvent.call(this, 'adskipped');
     // request ping for skip event
     if (this.hasSkipEvent) {
-      FWVAST.dispatchPingEvent.call(this, 'skip');
-    } else {
-      TRACKINGEVENTS.updateResetStatus.call(this);
+      FW.dispatchPingEvent.call(this, 'skip');
     }
     // resume content
     VASTPLAYER.resumeContent.call(this);
